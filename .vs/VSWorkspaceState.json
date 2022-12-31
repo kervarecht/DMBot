@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\DMBot_Node",
+    "\\DMBot_Node\\node_modules",
+    "\\DMBot_Node\\node_modules\\discord.js",
+    "\\DMBot_Node\\node_modules\\discord.js\\src",
+    "\\DMBot_Node\\node_modules\\discord.js\\src\\client"
+  ],
+  "SelectedNode": "\\DMBot_Node\\node_modules",
+  "PreviewInSolutionExplorer": false
+}
