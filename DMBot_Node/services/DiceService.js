@@ -8,7 +8,6 @@ const roll = function (diceString, modifier, advantage) {
     }
 
     const operations = parseOperations(diceString);
-    console.log(operations);
     for (let x = 0; x < operations.inputs.length; x++) {
         let rolls = []
         let rollCount, diceType, modifier;
@@ -35,10 +34,8 @@ const roll = function (diceString, modifier, advantage) {
                 referenceArray.push(resultOne, resultTwo);
                 rolls.push(referenceArray);
                 results.total += advantageSort(resultsArray, advantage)[0];
-                console.log("processed: ", resultsArray, "original: ", referenceArray);
             }
         }
-        console.log("rolls: ", rolls);
         results.results.push(rolls);
     }
 
@@ -94,7 +91,6 @@ const parseInputs = function (input) {
     return { "diceCount": diceCount, "diceValue": diceValue, "modifier": modifier };
 }
 const advantageSort = function (array, advantage) {
-    console.log("array: ", array)
     let rollWithAdvantage, rollWithDisadvantage, sortedArray;
     if (Number(advantage) === 1) rollWithAdvantage = true
     if (Number(advantage) === 2) rollWithDisadvantage = true;
@@ -107,7 +103,6 @@ const advantageSort = function (array, advantage) {
     else {
         sortedArray = array;
     }
-    console.log("sortedArray: ", sortedArray);
     return sortedArray
 }
 
