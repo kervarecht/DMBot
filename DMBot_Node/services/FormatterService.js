@@ -61,10 +61,55 @@ const getResultIndex = function (array, advantage) {
     }
     return index;
 }
+const formatCharacterList = async function (characterArray, fields) {
+    if (Array.isArray(characterArray)) {
+        let formattedString = '';
+        for (let x = 0; x < characterArray.length; x++) {
+            let character = await formatCharacterInfo(characterArray[x], fields);
+            formattedString = formattedString.concat(character)
+            if (x == characterArray.length - 1) {
+                //console.log(formattedString);
+                return formattedString;
+            }
+        }
 
+    }
+    else {
+        response = await formatCharacterInfo(characterArray, fields);
+        return response
+    }
+
+}
+
+const formatCharacterInfo = async function (characterInfo, fields) {
+    let formattedArray = [];
+    let keys = Object.keys(characterInfo);
+    for (let x = 0; x < keys.length; x++) {
+        if (fields.includes(keys[x])) {
+            let key = keys[x]
+            let value = characterInfo[key];
+            switch (keys[x]) {
+                case 'character_name':
+                    formattedArray.push("**Name: " + value + "** ")
+                    break;
+                case 'alignment':
+                    formattedArray.push("Alignment: " + value)
+                    break;
+            }
+            
+        }
+        if (x == keys.length - 1) {
+            console.log(formattedArray);
+            return formattedArray.join(" - ").concat(" \
+                ");
+        }
+    }
+}
 
 module.exports = {
     formatD20Rolls: formatD20Rolls,
     formatTotal: formatTotal,
-    getResultIndex: getResultIndex
+    getResultIndex: getResultIndex,
+    formatCharacterList: formatCharacterList,
+    formatCharacterInfo: formatCharacterInfo
 }

@@ -20,15 +20,43 @@ const createCharacter = async function (characterName, alignment, totalLevel, xp
         ${abilityScores.str}, ${abilityScores.dex}, ${abilityScores.int}, \
         ${abilityScores.wis}, ${abilityScores.cha}, ${abilityScores.con})`
     let result = await DBService.operation(query);
-    return(result);
+    return (result.lastID);
 }
 
-const linkCharacter = async function(userId, characterId, active){
-
+const linkCharacter = async function (userId, characterId, active) {
+    if (active) {
+        let update = `UPDATE user_character_map SET active = 0 WHERE user_id = ${userId}`
+        let insert = `INSERT INTO user_character_map (user_id, character_id, active) VALUES (${userId}, ${characterId}, 1)`
+        let updateResult = await DBService.operation(update, [])
+        if (!updateResult) {
+            return new Error("failed to update characters");
+        }
+        else {
+            let insertResult = await DBService.operation(insert, [])
+            if (!insertResult) {
+                return new Error("failed to insert new linked character!");
+            } else {
+                return insertResult.lastID;
+            }
+        }
+    }
+    else {
+        let insert = `INSERT INTO user_character_map (user_id, character_id, active) VALUES (${userId}, ${characterId}, 0)`
+        let insertResult = await DBService.operation(insert, []);
+        if (!insertResult) {
+            return new Error("Failed to insert new linked character!");
+        }
+        else {
+            return insertResult.lastID;
+        }
+    }
+    
 }
 
 const getCharactersByUser = async function(userId){
-
+    let query = 'SELECT c.* FROM character c INNER JOIN user_character_map ucm ON ucm.character_id = c.id;'
+    let response = await DBService.queryAll(query, []);
+    return response
 }
 
 module.exports = {

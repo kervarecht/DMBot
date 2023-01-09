@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, Events, ModalBuilder } = require('discord.js');
 const CharacterService = require('../services/CharacterService.js');
 const UserService = require('../services/UserService.js');
+const FormatterService = require('../services/FormatterService.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -68,35 +69,64 @@ module.exports = {
                             { "name": "Unaligned", "value": "Unaligned" })
                 )
 
+    ).addSubcommand(subcommand =>
+        subcommand.setName('activate')
+            .setDescription('Set a character to be your active character')
+    ).addSubcommand(subcommand =>
+        subcommand.setName('list')
+            .setDescription('List my created characters by name.')
         )
+
     ,
     async execute(interaction) {
-        let characterName, alignment, level, xp, totalHP, currentHP, tempHP, race, subrace, abilityScores;
-        console.log(interaction.options);
-        //Lots of null checks
-        characterName = interaction.options.get('name', true).value;
-        alignment = interaction.options.getString('alignment');
-        level = interaction.options.getInteger('level');
-        totalHP = interaction.options.getInteger('totalHP');
-        currentHP = totalHP;
-        tempHP = 0;
-        race = interaction.options.getString('race');
-        subrace = interaction.options.getString('subrace');
-        abilityScores = {
-            'str': interaction.options.getInteger('str'),
-            'dex': interaction.options.getInteger('dex'),
-            'int': interaction.options.getInteger('dex'),
-            'wis': interaction.options.getInteger('wis'),
-            'cha': interaction.options.getInteger('cha'),
-            'con': interaction.options.getInteger('con')
+        
+        let subcommand = await interaction.options.getSubcommand();
+        if (subcommand == 'create') {
+            let characterName, alignment, level, xp, totalHP, currentHP, tempHP, race, subrace, abilityScores, active;
+            characterName = interaction.options.get('name', true).value;
+            alignment = interaction.options.getString('alignment');
+            level = interaction.options.getInteger('level');
+            totalHP = interaction.options.getInteger('totalHP');
+            currentHP = totalHP;
+            tempHP = 0;
+            race = interaction.options.getString('race');
+            subrace = interaction.options.getString('subrace');
+            abilityScores = {
+                'str': interaction.options.getInteger('str'),
+                'dex': interaction.options.getInteger('dex'),
+                'int': interaction.options.getInteger('dex'),
+                'wis': interaction.options.getInteger('wis'),
+                'cha': interaction.options.getInteger('cha'),
+                'con': interaction.options.getInteger('con')
+            }
+            active = interaction.options.getBoolean('active');
+            let createResult = await CharacterService.createCharacter(characterName, alignment, level, xp, totalHP, currentHP, tempHP, race, subrace, abilityScores);
+            console.log(createResult);
+            if (!createResult) {
+                interaction.reply(`Failed to create new character!`);
+            }
+            else {
+                let linkCharacter = await (CharacterService.linkCharacter(interaction.user.id, createResult, active))
+                if (!linkCharacter) {
+                    interaction.reply(`Created character but failed to link, please try again shortly.`);
+                }
+                else {
+                    let activeString;
+                    active ? activeString = 'active' : activeString = 'inactive'
+                    interaction.reply(`Created ${characterName} and linked to ${interaction.user.username} as ${activeString} character!`);
+                }
+            }
+        }
+        else if (subcommand == 'list') {
+            let result = await CharacterService.getCharactersByUser(interaction.user.id);
+            if (!result) {
+                interaction.reply(`No characters found for ${interaction.user.username}`);
+            }
+            else {
+                let response = await FormatterService.formatCharacterList(result, ["character_name", "alignment"]);
+                interaction.reply(`Characters! ${response}`);
+            }
         }
         
-        let createResult = await CharacterService.createCharacter(characterName, alignment, level, xp, totalHP, currentHP, tempHP, race, subrace, abilityScores);
-        if (!createResult) {
-            interaction.reply(`Failed to create new character!`);
-        }
-        else {
-            interaction.reply(`Created ${characterName}!`);
-        }
     }
 };

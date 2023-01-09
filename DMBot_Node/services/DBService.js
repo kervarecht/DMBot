@@ -21,6 +21,23 @@ const query = async function (query) {
     
 }
 
+const queryAll = async function (query) {
+    let response;
+    /** 
+    let db = new sqlite3.Database(database, (err) => {
+        if (err) console.error(err);
+        console.log("connected to DMBot DB");
+    });
+    **/
+    let db = await open({
+        filename: database,
+        driver: sqlite3.Database
+    })
+    response = await db.all(query, []);
+    return response
+    db.close();
+}
+
 const operation = async function (operation) {
     let db = await open({
         filename: database,
@@ -34,5 +51,6 @@ const operation = async function (operation) {
 
 module.exports = {
     query: query,
-    operation: operation
+    operation: operation,
+    queryAll: queryAll
 }
