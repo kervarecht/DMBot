@@ -82,26 +82,60 @@ const formatCharacterList = async function (characterArray, fields) {
 }
 
 const formatCharacterInfo = async function (characterInfo, fields) {
-    let formattedArray = [];
-    let keys = Object.keys(characterInfo);
-    for (let x = 0; x < keys.length; x++) {
-        if (fields.includes(keys[x])) {
-            let key = keys[x]
-            let value = characterInfo[key];
-            switch (keys[x]) {
-                case 'character_name':
-                    formattedArray.push("**Name: " + value + "** ")
-                    break;
-                case 'alignment':
-                    formattedArray.push("Alignment: " + value)
-                    break;
+    if (!Array.isArray(characterInfo)) {
+        let formattedArray = [];
+        let keys = Object.keys(characterInfo);
+        for (let x = 0; x < keys.length; x++) {
+            if (fields.includes(keys[x])) {
+                let key = keys[x]
+                let value = characterInfo[key];
+                console.log(key, "value: ", value)
+                switch (keys[x]) {
+                    case 'character_name':
+                        formattedArray.push("**Name: " + value + "** ")
+                        break;
+                    case 'alignment':
+                        formattedArray.push("Alignment: " + value)
+                        break;
+                    case 'race':
+                        formattedArray.push("Race: " + value)
+                        break;
+                    case 'speed':
+                        formattedArray.push("Speed: " + value)
+                        break;
+                    case 'size':
+                        formattedArray.push("Size: " + value)
+                        break;
+                    case 'trait_name':
+                        let trait = "\n*".concat(value, "* ", characterInfo.trait_description);
+                        formattedArray.push(trait)
+                        break;
+                }
+
             }
-            
+            if (x == keys.length - 1) {
+                console.log(formattedArray);
+                return formattedArray.join(" - ").concat(" \n");
+            }
         }
-        if (x == keys.length - 1) {
-            console.log(formattedArray);
-            return formattedArray.join(" - ").concat(" \
+
+    }
+    else {
+        let formattedArray = [];
+        let basicFieldsArray = ["character_name", "alignment", "race", "speed", "size"]
+        let basicFields = basicFieldsArray.filter(field => fields.includes(field));
+        console.log(basicFields);
+        let basicInfo = await formatCharacterInfo(characterInfo[0], basicFields);
+        formattedArray.push(basicInfo);
+        let traitsArray = ["trait_name"]
+        for (let i = 0; i < characterInfo.length; i++) {
+            let trait = await formatCharacterInfo(characterInfo[i], traitsArray);
+            formattedArray.push(trait);
+            if (i == characterInfo.length - 1) {
+                //console.log(formattedArray);
+                return formattedArray.join(" - ").concat(" \
                 ");
+            }
         }
     }
 }

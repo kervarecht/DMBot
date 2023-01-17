@@ -49,6 +49,15 @@ module.exports = {
                 .addStringOption(option =>
                     option.setName('race')
                         .setDescription('Your character\'s race')
+                        .addChoices({ "name": "Dwarf", "value": "Dwarf" },
+                            { "name": "Elf", "value": "Elf" },
+                            { "name": "Halfling", "value": "Halfling" },
+                            { "name": "Human", "value": "Human" },
+                            { "name": "Dragonborn", "value": "Dragonborn" },
+                            { "name": "Gnome", "value": "Gnome" },
+                            { "name": "Half-Elf", "value": "Half-Elf" },
+                            { "name": "Half-Orc", "value": "Half-Orc" },
+                            { "name": "Tiefling", "value": "Tiefling" })
                 )
                 .addStringOption(option =>
                     option.setName('subrace')
@@ -75,8 +84,11 @@ module.exports = {
     ).addSubcommand(subcommand =>
         subcommand.setName('list')
             .setDescription('List my created characters by name.')
-        )
-
+    )
+        .addSubcommand(subcommand =>
+            subcommand.setName('display')
+                .setDescription('Display info on your active character.')
+            )
     ,
     async execute(interaction) {
         
@@ -127,6 +139,20 @@ module.exports = {
                 interaction.reply(`Characters! ${response}`);
             }
         }
-        
+        else if (subcommand == 'display') {
+            let result = await CharacterService.getActiveCharacterInfo(interaction.user.id);
+            if (!result) {
+                interaction.reply(`No active character found for ${interaction.user.username}!`);
+            }
+            else {
+                let response = await FormatterService.formatCharacterInfo(result, ["character_name", "alignment", "race", "speed", "size"]);
+                if (!response) {
+                    interaction.reply("Couldn't format character information.");
+                }
+                else {
+                    interaction.reply(`${response}`);
+                }
+            }
+        }
     }
 };
