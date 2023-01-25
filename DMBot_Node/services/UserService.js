@@ -1,4 +1,4 @@
-const DBService = require('./DBservice.js');
+const DBService = require('../services/DBService.js');
 
 const checkUser = async function (userId, guildId) {
     let response = await DBService.query(`SELECT * FROM User WHERE discord_user_id = ${userId} AND guild_id = ${guildId};`);
