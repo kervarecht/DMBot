@@ -2,11 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\DMBot_Node",
-    "\\DMBot_Node\\node_modules",
-    "\\DMBot_Node\\node_modules\\discord.js",
-    "\\DMBot_Node\\node_modules\\discord.js\\src",
-    "\\DMBot_Node\\node_modules\\discord.js\\src\\client"
+    "\\DMBot_Node\\commands",
+    "\\DMBot_Node\\services"
   ],
-  "SelectedNode": "\\DMBot_Node\\node_modules",
+  "SelectedNode": "\\DMBot_Node\\services\\DiceService.js",
   "PreviewInSolutionExplorer": false
 }
