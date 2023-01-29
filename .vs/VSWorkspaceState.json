@@ -5,5 +5,6 @@
     "\\DMBot_Node\\commands",
     "\\DMBot_Node\\services"
   ],
+  "SelectedNode": "\\DMBot_Node\\services\\DiceService.js",
   "PreviewInSolutionExplorer": false
 }
