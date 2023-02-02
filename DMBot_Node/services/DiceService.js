@@ -48,7 +48,7 @@ const parseOperations = function (input) {
     let parsingArray = []
     for (let char = 0; char < input.length; char++) {
         if (input[char] === "-" || input[char] === "+") {
-            if (char === 0) return new Error("Cannot start with an operation, start with a dice instead", "DiceService.js");
+            if (char === 0) return new Error("Cannot start with an operation, start with a die instead", "DiceService.js");
             input[char] === "+" ? operands.push("plus") : operands.push("minus");
             inputArray.push(parseInputs(parsingArray.join("")));
             parsingArray = []

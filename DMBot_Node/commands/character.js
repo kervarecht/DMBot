@@ -113,7 +113,7 @@ module.exports = {
             }
             active = interaction.options.getBoolean('active');
             let createResult = await CharacterService.createCharacter(characterName, alignment, level, xp, totalHP, currentHP, tempHP, race, subrace, abilityScores);
-            console.log(createResult);
+            //console.log(createResult);
             if (!createResult) {
                 interaction.reply(`Failed to create new character!`);
             }
