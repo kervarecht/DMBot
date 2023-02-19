@@ -63,6 +63,9 @@ app.get("/health", (req, res) => {
 app.post('/trait', (req, res) => {
 	if (!req.headers["x-dmbot-header"]) {
 		res.status(403).send("Unauthorized");
+	}
+	else {
+
     }
 });
 
