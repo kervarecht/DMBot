@@ -5,6 +5,9 @@ const { Client, Events, Collection, GatewayIntentBits } = require('discord.js');
 //require navigation
 const fs = require('node:fs');
 const path = require('node:path');
+//express
+const express = require('express');
+const app = express()
 
 //new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -51,3 +54,12 @@ client.on(Events.InteractionCreate, async interaction => {
 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 	}
 });
+
+//ENDPOINTS FOR STUFF
+app.post('/trait', (req, res) => {
+	if (!req.headers["x-dmbot-header"]) {
+		res.status(403).send("Unauthorized");
+    }
+});
+
+app.listen(3000);

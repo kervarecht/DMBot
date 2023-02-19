@@ -70,14 +70,13 @@ const getActiveCharacterInfo = async function (userId) {
         return false
     }
     let characterId = activeCharacterId.character_id;
-    console.log(characterId);
-    let activeCharacterInfoQuery = `SELECT c.*, r.name as "race", r.speed as "speed", s.name as "size", rt.name as "trait_name", \
-                                        rt.ability_score as "trait_ability_score", rt.modifier as "trait_modifier", \
-                                        rt.description as "trait_description" \
+    let activeCharacterInfoQuery = `SELECT c.*, r.name as "race", r.speed as "speed", s.name as "size", t.name as "trait_name", \
+                                        t.ability_score as "trait_ability_score", t.modifier as "trait_modifier", \
+                                        t.description as "trait_description" \
                                         FROM character c \
                                         LEFT JOIN races r  ON c.race = r.id \
                                         LEFT JOIN sizes s ON r.size = s.id \
-                                        LEFT JOIN races_traits rt  ON rt.race_id = r.id \
+                                        LEFT JOIN traits t  ON t.race_id = r.id \
                                         WHERE c.id = $1;`
     let activeCharacterInfo = await DBService.queryAll(activeCharacterInfoQuery, [characterId]);
     return activeCharacterInfo;

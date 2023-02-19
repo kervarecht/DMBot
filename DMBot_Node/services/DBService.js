@@ -1,17 +1,27 @@
-const sqlite3 = require('sqlite3').verbose();
-const open = require('sqlite').open;
-require('dotenv').config()
-const database = process.env.DATABASE_PATH
-
 //Trying postgres
 const { Client } = require('pg');
-const client = new Client({
-    user: process.env.PGUSER,
-    host: process.env.PGHOST,
-    password: process.env.PGPASSWORD,
-    database: process.env.PGDATABASE,
-    port: process.env.PGPORT
-});
+
+let client;
+
+if (process.env.PRODUCTION==1) {
+    client = new Client({
+        user: process.env.PGUSER_PROD,
+        host: process.env.PGHOST_PROD,
+        password: process.env.PGPASSWORD_PROD,
+        database: process.env.PGDATABASE_PROD,
+        port: process.env.PGPORT_PROD
+    });
+}
+else {
+    client = new Client({
+        user: process.env.PGUSER_DEV,
+        host: process.env.PGHOST_DEV,
+        password: process.env.PGPASSWORD_DEV,
+        database: process.env.PGDATABASE_DEV,
+        port: process.env.PGPORT_DEV
+    });
+
+}
 
 client.connect((err) => {
     if (err) {
@@ -27,7 +37,6 @@ const query = async function (query, params) {
     let response;
     try {
         response = await client.query(query, params);
-        console.log("response: ", response)
     } catch (err) {
         response = false
     }
@@ -40,7 +49,6 @@ const queryAll = async function (query, params) {
     try {
         let result = await client.query(query, params);
         response = result.rows;
-        console.log(response)
     }
     catch (err) {
         console.error(err);
