@@ -56,6 +56,10 @@ client.on(Events.InteractionCreate, async interaction => {
 });
 
 //ENDPOINTS FOR STUFF
+app.get("/health", (req, res) => {
+	res.status(200).send("Healthcheck succeeded!");
+})
+
 app.post('/trait', (req, res) => {
 	if (!req.headers["x-dmbot-header"]) {
 		res.status(403).send("Unauthorized");
