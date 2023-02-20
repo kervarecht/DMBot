@@ -16,7 +16,7 @@ const roll = function (diceString, modifier, advantage) {
             rolls.push(modifier);
             results.total += modifier
         } else {
-            if (operations.inputs[x].diceCount === null) {
+            if (!operations.inputs[x].diceCount) {
                 rollCount = 1;
             }
             else {
