@@ -39,7 +39,6 @@ const deploy = (async () => {
 				Routes.applicationCommands(clientId),
 				{ body: commands },
 			);
-			return data;
 			if (data) {
 				console.log(`Successfully reloaded ${data.length} application (/) commands.`);
 				process.exit();
