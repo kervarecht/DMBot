@@ -39,8 +39,11 @@ const deploy = (async () => {
 				Routes.applicationGuildCommands(clientId),
 				{ body: commands },
 			);
-
-			console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+			return data;
+			if (data) {
+				console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+				process.exit();
+			}
 		} catch (error) {
 			// And of course, make sure you catch and log any errors!
 			console.error(error);
@@ -55,8 +58,12 @@ const deploy = (async () => {
 				Routes.applicationGuildCommands(clientId, guildId),
 				{ body: commands },
 			);
+			if (data) {
+				console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+				process.exit();
+            }
 
-			console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+			
 		} catch (error) {
 			// And of course, make sure you catch and log any errors!
 			console.error(error);
@@ -64,5 +71,3 @@ const deploy = (async () => {
     }
 		
 })();
-
-if (deploy) process.exit();
