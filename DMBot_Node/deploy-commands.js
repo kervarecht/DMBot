@@ -6,12 +6,12 @@ let token, guildId, clientId
 
 if (process.env.PRODUCTION == 1) {
 	token = process.env.BOT_TOKEN;
-	clientId = process.env.APP_ID
+	clientId = process.env.APP_ID;
 }
 else {
-	token = process.env.TEST_BOT_TOKEN
-	guildId = process.env.DEV_SERVER_ID
-	clientId=process.env.TEST_APP_ID
+	token = process.env.TEST_BOT_TOKEN;
+	guildId = process.env.DEV_SERVER_ID;
+	clientId = process.env.TEST_APP_ID;
 }
 
 
