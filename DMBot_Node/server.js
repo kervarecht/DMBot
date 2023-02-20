@@ -17,7 +17,14 @@ client.once(Events.ClientReady, c => {
 });
 
 // Log in to Discord with your client's token
-client.login(process.env.BOT_TOKEN);
+let token;
+if (process.env.PRODUCTION == 1) {
+	token = process.env.BOT_TOKEN
+}
+else {
+	token = process.env.TEST_BOT_TOKEN
+}
+client.login(token);
 
 client.commands = new Collection();
 //Configure command paths

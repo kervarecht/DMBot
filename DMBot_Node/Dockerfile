@@ -12,4 +12,6 @@ COPY . .
 
 RUN npm install
 
+CMD ["node", "deploy-commands.js"]
+
 CMD [ "node", "server.js" ]
