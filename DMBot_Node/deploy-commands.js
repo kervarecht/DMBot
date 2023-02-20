@@ -2,9 +2,18 @@ const { REST, Routes } = require('discord.js');
 require('dotenv').config()
 const fs = require('node:fs');
 
-const token = process.env.BOT_TOKEN;
-const guildId = process.env.DEV_SERVER_ID
-const clientId = process.env.APP_ID
+let token, guildId, clientId
+
+if (process.env.PRODUCTION == 1) {
+	token = process.env.BOT_TOKEN;
+	clientId = process.env.APP_ID
+}
+else {
+	token = process.env.TEST_BOT_TOKEN
+	guildId = process.env.DEV_SERVER_ID
+	clientId=process.env.TEST_APP_ID
+}
+
 
 const commands = [];
 // Grab all the command files from the commands directory you created earlier
@@ -20,7 +29,7 @@ for (const file of commandFiles) {
 const rest = new REST({ version: '10' }).setToken(token);
 
 // and deploy your commands!
-(async () => {
+const deploy = (async () => {
 	if (process.env.PRODUCTION == 1) {
 		try {
 			console.log(`Started refreshing ${commands.length} application (/) commands.`);
@@ -54,4 +63,6 @@ const rest = new REST({ version: '10' }).setToken(token);
 		}
     }
 		
-	})();
+})();
+
+if (deploy) process.exit();
