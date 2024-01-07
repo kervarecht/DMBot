@@ -88,8 +88,15 @@ const encrypt = async function (message, algorithm, key, guildId) {
     }
     switch (algorithm) {
         case "caesar":
+            if (isNaN(key)){
+                return "Key must be a number!"
+            }
+            key = Number(key);
             return caesarEncrypt(message, key);
         case "vigenere":
+            if (!isNaN(key)){
+                return "Key cannot be a number!"
+            }
             return vigenereEncrypt(message, key);
         case "atbash":
             return atbashEncrypt(message, key);
@@ -113,8 +120,15 @@ const decrypt = async function (message, algorithm, key, guildId) {
     }
     switch (algorithm) {
         case "caesar":
+            if (isNaN(key)){
+                return "Key must be a number!"
+            }
+            key = Number(key);
             return caesarDecrypt(message, key);
         case "vigenere":
+            if (!isNaN(key)){
+                return "Key cannot be a number!"
+            }
             return vigenereDecrypt(message, key);
         case "atbash":
             return atbashDecrypt(message, key);

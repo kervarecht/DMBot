@@ -16,7 +16,7 @@ module.exports = {
                     option.setName('decrypt_algorithm')
                         .setRequired(true)
                         .setDescription('Algorithm to use'))
-                .addIntegerOption(option =>
+                .addStringOption(option =>
                     option.setName('decrypt_key')
                         .setRequired(false)
                         .setDescription('Key to use(if the algorithm requires it)')))
@@ -31,7 +31,7 @@ module.exports = {
                     option.setName('encrypt_algorithm')
                         .setRequired(true)
                         .setDescription('Algorithm to use'))
-                .addIntegerOption(option =>
+                .addStringOption(option =>
                     option.setName('encrypt_key')
                         .setRequired(false)
                         .setDescription('Key to use(if the algorithm requires it)')))
@@ -50,13 +50,13 @@ module.exports = {
         if (interaction.options.getSubcommand() === 'decrypt') {
             const message = interaction.options.getString('decrypt_message');
             const algorithm = interaction.options.getString('decrypt_algorithm');
-            const key = interaction.options.getInteger('decrypt_key') || false;
+            const key = interaction.options.getString('decrypt_key') || false;
             const result = await EnigmaService.decrypt(message, algorithm, key, guildId);
             await interaction.reply(result);
         } else if (interaction.options.getSubcommand() === 'encrypt'){
             const message = interaction.options.getString('encrypt_message');
             const algorithm = interaction.options.getString('encrypt_algorithm');
-            const key = interaction.options.getInteger('encrypt_key') || false;
+            const key = interaction.options.getString('encrypt_key') || false;
             const result = await EnigmaService.encrypt(message, algorithm, key, guildId);
             await interaction.reply(result);
         }

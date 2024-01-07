@@ -40,8 +40,12 @@ const query = async function (query, params) {
     } catch (err) {
         response = false
     }
-    return response.rows[0]
-    
+    if (response.length > 0){
+        return response.rows[0]
+    }
+    else {
+        return "Not found!"
+    } 
 }
 
 const queryAll = async function (query, params) {
