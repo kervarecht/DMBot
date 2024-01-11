@@ -1,6 +1,6 @@
 {
   "name": "dmbot_node",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "DMBot_Node",
   "scripts": {
     "start": "node deploy-commands.js & node server.js"

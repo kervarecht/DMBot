@@ -1,6 +1,6 @@
 const formatD20Rolls = function (rolls, advantage) {
     if (!Array.isArray(rolls)) return new TypeError("Rolls are not in array format", "FormatterService.js");
-    console.log(rolls);
+    //console.log(rolls);
     //create a referenceArray
     let referenceArray = []
     //loop through the array elements
@@ -8,9 +8,19 @@ const formatD20Rolls = function (rolls, advantage) {
         //loop through the element's values
         for (let j = 0; j < rolls[i].length; j++) {
             if (!Array.isArray(rolls[i][j])) {
+
                 //if the value is not an array, format it ((**value**)) and push to the referenceArray
                 let processedString = '';
-                processedString = "(**".concat(rolls[i][j], "**)");
+                //Add a + if the value is greater than 0
+                if (rolls[i][j] > 0) {
+                    processedString = "(*+".concat(rolls[i][j], "*)")
+                }
+                else if (rolls[i][j] < 0) {
+                    processedString = "(*".concat(rolls[i][j], "*)")
+                }
+                else {
+                    processedString = "(*0*)"
+                }
                 referenceArray.push(processedString);
             }
             else {
@@ -124,7 +134,7 @@ const formatCharacterInfo = async function (characterInfo, fields) {
         let formattedArray = [];
         let basicFieldsArray = ["character_name", "alignment", "race", "speed", "size"]
         let basicFields = basicFieldsArray.filter(field => fields.includes(field));
-        console.log(basicFields);
+        //console.log(basicFields);
         let basicInfo = await formatCharacterInfo(characterInfo[0], basicFields);
         formattedArray.push(basicInfo);
         let traitsArray = ["trait_name"]
@@ -140,10 +150,35 @@ const formatCharacterInfo = async function (characterInfo, fields) {
     }
 }
 
+const formatMacro = function(macroName, macroDice, modifier, macroAdvantage) {
+    let advantage = macroAdvantage;
+    if (advantage == 0) advantage = "No Advantage"
+    if (advantage == 1) advantage = "Advantage"
+    if (advantage == 2) advantage = "Disadvantage"
+    return `Name: **${macroName}**: ${macroDice}  ${modifier}, ${advantage}`
+}
+
+const formatAdvantage = function(advantage){
+        if (advantage == 0) {
+            advantage = "No Advantage"
+        }
+        else if (advantage == 1) 
+        {
+            advantage = "Advantage"
+        }
+        else if (advantage == 2) {
+            advantage = "Disadvantage"
+        }
+        else advantage = '';
+        return `${advantage}`
+    }
+
 module.exports = {
     formatD20Rolls: formatD20Rolls,
     formatTotal: formatTotal,
     getResultIndex: getResultIndex,
     formatCharacterList: formatCharacterList,
-    formatCharacterInfo: formatCharacterInfo
+    formatCharacterInfo: formatCharacterInfo,
+    formatMacro: formatMacro,
+    formatAdvantage: formatAdvantage
 }

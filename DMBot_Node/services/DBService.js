@@ -37,10 +37,11 @@ const query = async function (query, params) {
     let response;
     try {
         response = await client.query(query, params);
+        console.log(response);
     } catch (err) {
         response = false
     }
-    if (response.length > 0){
+    if (response.rows.length > 0){
         return response.rows[0]
     }
     else {

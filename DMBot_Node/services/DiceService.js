@@ -1,4 +1,5 @@
 const roll = function (diceString, modifier, advantage) {
+    //console.log(`diceString: ${diceString}, modifier: ${modifier}, advantage: ${advantage}`);
     if (!diceString) diceString = "1d20"
     if (!modifier) modifier = 0
 
@@ -8,10 +9,19 @@ const roll = function (diceString, modifier, advantage) {
     }
 
     const operations = parseOperations(diceString);
+    if (validateModifier(modifier) && Number(modifier) > 0) {
+        operations.inputs.push(parseInputs(modifier))
+        operations.operands.push("plus");
+    }
+    else if (validateModifier(modifier) && Number(modifier) < 0) {
+        operations.inputs.push(parseInputs(modifier))
+        operations.operands.push("minus");
+    }
     for (let x = 0; x < operations.inputs.length; x++) {
         let rolls = []
         let rollCount, diceType, modifier;
         if (operations.inputs[x].modifier !== null) {
+            //console.log(`modifier: ${operations.inputs[x].modifier}`)
             modifier = Number(operations.inputs[x].modifier);
             rolls.push(modifier);
             results.total += modifier
@@ -41,6 +51,51 @@ const roll = function (diceString, modifier, advantage) {
 
     return results
 }
+
+function validateDiceRoll(input) {
+    // Regular expression to match the xdy format
+    const regex = /^(\d*)d(\d+)$/;
+
+    // Test the input against the regular expression
+    const match = input.match(regex);
+
+    // If the input doesn't match the regular expression, it's not valid
+    if (!match) {
+        return false;
+    }
+
+    // If x is missing or less than 1, assume 1
+    const x = match[1] ? parseInt(match[1]) : 1;
+
+    // y must be an integer greater than 0
+    const y = parseInt(match[2]);
+
+    // Check that x and y are valid
+    if (x < 1 || y < 1) {
+        return false;
+    }
+
+    // If we've made it this far, the input is valid
+    return true;
+}
+
+function validateModifier(input) {
+    input = input.toString();
+    // Regular expression to match the modifier format
+    const regex = /^([+-]\d+|0)$/;
+
+    // Test the input against the regular expression
+    const match = input.match(regex);
+
+    // If the input doesn't match the regular expression, it's not valid
+    if (!match) {
+        return false;
+    }
+
+    // If we've made it this far, the input is valid
+    return true;
+}
+
 const parseOperations = function (input) {
     if (typeof input != 'string') return new TypeError("Invalid type, expected string", "DiceService.js")
     let operands = []
@@ -60,8 +115,10 @@ const parseOperations = function (input) {
             }
         }
     }
+    //console.log(`operands: ${operands}, inputs: ${JSON.stringify(inputArray)}`);
     return { "operands": operands, "inputs": inputArray };
 }
+
 const parseInputs = function (input) {
     if (typeof input != 'string') return new TypeError("Invalid type, expected string", "DiceService.js")
     let diceCount, diceValue, modifier;
@@ -88,6 +145,7 @@ const parseInputs = function (input) {
             diceValue = diceArray[0];
         }
     }
+    //console.log(`diceCount: ${diceCount}, diceValue: ${diceValue}, modifier: ${modifier}`);
     return { "diceCount": diceCount, "diceValue": diceValue, "modifier": modifier };
 }
 const advantageSort = function (array, advantage) {
@@ -110,5 +168,7 @@ module.exports = {
     roll: roll,
     parseInputs: parseInputs,
     parseOperations: parseOperations,
-    advantageSort: advantageSort
+    advantageSort: advantageSort,
+    validateDiceRoll: validateDiceRoll,
+    validateModifier: validateModifier
 }
