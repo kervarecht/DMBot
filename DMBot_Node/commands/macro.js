@@ -95,8 +95,9 @@ module.exports = {
         }
         else if (interaction.options.getSubcommand() === 'delete') {
             macroName = interaction.options.getString('delete_macro_name');
-            const result = await MacroService.deleteMacro(macroName, guildId, interaction.user.id);
+            const result = await MacroService.deleteMacro(guildId, interaction.user.id, macroName);
             await interaction.reply(result);
+
         }
         else if (interaction.options.getSubcommand() === 'use') {
             const macroName = interaction.options.getString('macro_name');

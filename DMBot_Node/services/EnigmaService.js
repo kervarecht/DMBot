@@ -99,7 +99,7 @@ const encrypt = async function (message, algorithm, key, guildId) {
             }
             return vigenereEncrypt(message, key);
         case "atbash":
-            return atbashEncrypt(message, key);
+            return atbashEncrypt(message);
         case "affine":
             return affineEncrypt(message, key);
         case "railfence":
@@ -131,7 +131,7 @@ const decrypt = async function (message, algorithm, key, guildId) {
             }
             return vigenereDecrypt(message, key);
         case "atbash":
-            return atbashDecrypt(message, key);
+            return atbashDecrypt(message);
         case "affine":
             return affineDecrypt(message, key);
         case "railfence":
@@ -219,7 +219,7 @@ const vigenereDecrypt = function (message, key) {
     return result;
 }
 
-const atbashEncrypt = function (message, key) {
+const atbashEncrypt = function (message) {
     let result = "";
     for (let i = 0; i < message.length; i++) {
         let char = message[i];
@@ -237,7 +237,7 @@ const atbashEncrypt = function (message, key) {
     return result;
 }
 
-const atbashDecrypt = function (message, key) {
+const atbashDecrypt = function (message) {
     let result = "";
     for (let i = 0; i < message.length; i++) {
         let char = message[i];
@@ -387,5 +387,19 @@ module.exports = {
     encrypt: encrypt,
     decrypt: decrypt,
     listAvailableCyphers: listAvailableCyphers,
-    discoverCypher: discoverCypher
+    discoverCypher: discoverCypher,
+    checkAccessToCypher: checkAccessToCypher,
+    cypherDiscovered: cypherDiscovered,
+    caesarEncrypt: caesarEncrypt,
+    caesarDecrypt: caesarDecrypt,
+    vigenereEncrypt: vigenereEncrypt,
+    vigenereDecrypt: vigenereDecrypt,
+    atbashEncrypt: atbashEncrypt,
+    atbashDecrypt: atbashDecrypt,
+    affineEncrypt: affineEncrypt,
+    affineDecrypt: affineDecrypt,
+    railfenceEncrypt: railfenceEncrypt,
+    railfenceDecrypt: railfenceDecrypt,
+    rot13Encrypt: rot13Encrypt,
+    rot13Decrypt: rot13Decrypt
 }

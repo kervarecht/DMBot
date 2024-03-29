@@ -97,7 +97,7 @@ function validateModifier(input) {
 }
 
 const parseOperations = function (input) {
-    if (typeof input != 'string') return new TypeError("Invalid type, expected string", "DiceService.js")
+    if (typeof input != 'string') throw new TypeError("Invalid type, expected string", "DiceService.js")
     let operands = []
     let inputArray = []
     let parsingArray = []
