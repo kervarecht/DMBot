@@ -66,9 +66,15 @@ const listMacros = async function(guildId, userId, all) {
 }
 
 const deleteMacro = async function(guildId, userId, macroName) {
-    const query = 'DELETE FROM macros WHERE guild_id = $1 AND user_id = $2 AND macro_name = $3';
+    const query = 'DELETE FROM macros WHERE guild_id = $1 AND user_id = $2 AND macro_name = $3 RETURNING macro_id';
     const params = [guildId, userId, macroName];
-    return await DBService.operation(query, params);
+    const result = await DBService.operation(query, params);
+    if (!result) {
+        return "Something went wrong!"
+    }
+    else if (result.rows[0]){
+        return `Macro ${macroName} deleted!`;
+    }
 }
 
 const useMacro = async function(guildId, userId, macroName) {
