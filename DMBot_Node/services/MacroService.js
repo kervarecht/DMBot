@@ -3,6 +3,7 @@ const DiceService = require('./DiceService');
 const FormatterService = require('./FormatterService');
 
 const createMacro = async function(userId, macroName, macroDice, modifier, advantage, guildId) {
+    
     const validationErrors = validateMacro(macroDice, advantage, modifier);
     if (validationErrors) {
         return validationErrors;
@@ -12,13 +13,15 @@ const createMacro = async function(userId, macroName, macroDice, modifier, advan
     result = await DBService.operation(query, params);
     console.log(result);
     if (!result) {
+        console.error(result)
         return "Error creating macro!"
     }
     else if (result.rows[0]){
         return `Macro ${macroName} created!`;
     }
     else {
-        return "Error creating macro!"
+        console.error(result)
+        return `Error creating macro ${macroName}!`
     
     }
 }
